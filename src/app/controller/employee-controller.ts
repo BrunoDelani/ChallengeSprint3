@@ -19,6 +19,15 @@ class EmployeeController {
       return res.status(500).json({ error });
     }
   }
+
+  public async updateEmployee (req: Request, res: Response): Promise<Response> {
+    try {
+      const result = await Employee.findByIdAndUpdate(req.params.id, req.body);
+      return res.status(201).json(result);
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+  }
 }
 
 export default new EmployeeController();

@@ -6,7 +6,7 @@ const EmployeeSchema = new Schema({
   name: { type: String, required: true },
   cpf: { type: String, unique: true, required: true },
   office: { type: String, enum: ['gerente', 'vendedor', 'caixa'], required: true },
-  birthday: { type: Date, required: true },
+  birthday: { type: String, required: true },
   situation: { type: String, default: 'active' }
 });
 

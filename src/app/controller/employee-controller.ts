@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Employee from '../schema/employee-schema';
-import convertDate from '../utils/convertDate';
 
 class EmployeeController {
   public async findEmployee (req: Request, res: Response): Promise<Response> {
@@ -14,7 +13,6 @@ class EmployeeController {
 
   public async createEmployee (req: Request, res: Response): Promise<Response> {
     try {
-      req.body.birthday = convertDate(req.body.birthday);
       const result = await Employee.create(req.body);
       return res.status(201).json(result);
     } catch (error) {

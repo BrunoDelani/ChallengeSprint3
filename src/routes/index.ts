@@ -6,6 +6,7 @@ const routes = Router();
 
 routes.get('/api/v1/employee/', EmployeeController.findEmployee);
 routes.post('/api/v1/employee/', EmployeeController.createEmployee);
-routes.put('/api/v1/employee/:id', EmployeeController.updateEmployee);
+routes.put('/api/v1/employee/:employee_id', EmployeeController.updateEmployee);
+routes.delete('/api/v1/employee/:employee_id', EmployeeController.deleteEmployee);
 
 export default routes;

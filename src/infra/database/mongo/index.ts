@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-mongoose.connect(`mongodb+srv://${'Challenge-Sprint'}:${'Challenge-Sprint'}@nodeapi.w1es0.mongodb.net/${'Challenge-Sprint3'}`);
+mongoose.connect(`mongodb+srv://${'Challenge-Sprint'}:${'Challenge-Sprint'}@nodeapi.w1es0.mongodb.net/${'challenge-sprint3'}`);
 
 const database = mongoose.connection;
 

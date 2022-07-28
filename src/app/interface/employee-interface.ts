@@ -4,7 +4,7 @@ interface EmployeeInterface extends mongoose.Document {
   id?: String,
   name?: String,
   cpf?: String,
-  office?: Number,
+  office?: String,
   birthday?: String,
   situation?: String
 }

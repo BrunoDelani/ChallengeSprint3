@@ -35,9 +35,6 @@ class EmployeeController {
             return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
           });
       }
-      if (result.birthday) {
-        result.birthday = new Date(new Intl.DateTimeFormat('pt-BR').format(result.birthday));
-      }
       return res.status(201).json(result);
     } catch (error) {
       return res.status(500).json({ error });
@@ -50,7 +47,13 @@ class EmployeeController {
       Employee.findByIdAndUpdate(id, { $set: req.body }, async (error) => {
         if (!error) {
           const employee = await Employee.findById(id);
-          return res.status(200).json({ message: 'Updated', employee });
+          if (employee && employee.cpf) {
+            employee.cpf = employee.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
+              function (regex, argumento1, argumento2, argumento3, argumento4) {
+                return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
+              });
+          }
+          return res.status(200).json({ message: 'Updated successfully.', employee });
         } else {
           return res.status(404).json({
             message: 'Bad Request',
@@ -89,8 +92,6 @@ class EmployeeController {
       return res.status(500).json({ error });
     }
   }
-
-  private validateEmployee () { }
 }
 
 export default new EmployeeController();

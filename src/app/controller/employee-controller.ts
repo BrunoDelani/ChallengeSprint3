@@ -43,10 +43,9 @@ class EmployeeController {
 
   public async updateEmployee (req: Request, res: Response) {
     try {
-      const id = req.params.employee_id;
-      Employee.findByIdAndUpdate(id, { $set: req.body }, async (error) => {
+      Employee.findByIdAndUpdate(req.params.employee_id, { $set: req.body }, async (error) => {
         if (!error) {
-          const employee = await Employee.findById(id);
+          const employee = await Employee.findById(req.params.employee_id);
           if (employee && employee.cpf) {
             employee.cpf = employee.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
               function (regex, argumento1, argumento2, argumento3, argumento4) {
@@ -72,8 +71,7 @@ class EmployeeController {
 
   public async deleteEmployee (req: Request, res: Response) {
     try {
-      const id = req.params.employee_id;
-      Employee.findByIdAndDelete(id)
+      Employee.findByIdAndDelete(req.params.employee_id)
         .exec((err) => {
           if (!err) {
             return res.status(204).send();

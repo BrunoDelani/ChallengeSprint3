@@ -10,7 +10,12 @@ export default (req, res, next) => {
     req.body.cpf = req.body.cpf.replace(/[^0-9]/g, '');
     const teste = validateCPF(req.body.cpf);
     if (!teste) {
-      return res.status(400).json({ message: 'Sent CPF field is invalid' });
+      return res.status(400).json({
+        message: 'Bad Request',
+        details: [
+          { message: 'Sent CPF field is invalid' }
+        ]
+      });
     }
   } catch (error) {
     console.log(error);

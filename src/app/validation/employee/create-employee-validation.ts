@@ -21,10 +21,10 @@ export default (req, res, next) => {
     console.log(error);
   }
   const schema = Joi.object({
-    name: Joi.string().required(),
-    cpf: Joi.string().required(),
+    name: Joi.string().max(100).required(),
+    cpf: Joi.string().min(11).max(11).required(),
     office: Joi.string().valid('gerente', 'vendedor', 'caixa').required(),
-    birthday: Joi.date().max('now').required()
+    birthday: Joi.date().less('now').required()
   });
   const { error } = schema.validate(req.body, { abortEarly: false });
   if (error) {

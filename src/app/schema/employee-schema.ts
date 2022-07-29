@@ -20,7 +20,7 @@ const EmployeeSchema = new Schema({
             return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
           }),
         office: ret.office,
-        birthday: moment().format('DD/MM/YYYY'),
+        birthday: moment(ret.birthday).format('DD/MM/YYYY'),
         situation: ret.situation
       };
     }

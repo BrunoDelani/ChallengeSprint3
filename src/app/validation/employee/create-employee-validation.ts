@@ -21,11 +21,14 @@ export default (req, res, next) => {
   });
   const { error } = schema.validate(req.body, { abortEarly: false });
   if (error) {
-    return res.status(400).json(
-      error.details.map((detail) => ({
+    return res.status(400).json({
+      message: 'Bad Request',
+      details: error.details.map((detail) => ({
         name: detail.path.join('.'),
         description: detail.message
-      }))
+      })
+      )
+    }
     );
   };
   return next();

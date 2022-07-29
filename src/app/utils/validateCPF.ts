@@ -2,8 +2,6 @@ export default (strCPF: String): boolean => {
   let Soma: number = 0;
   let Resto: number;
 
-  strCPF = strCPF.replace(/[^0-9]/g, '');
-
   if (strCPF === '00000000000') {
     return false;
   }

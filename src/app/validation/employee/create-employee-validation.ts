@@ -5,6 +5,7 @@ import validateCPF from '../../utils/validateCPF';
 export default (req, res, next) => {
   req.body.birthday = convertDate(req.body.birthday);
   try {
+    req.body.cpf = req.body.cpf.replace(/[^0-9]/g, '');
     const teste = validateCPF(req.body.cpf);
     if (!teste) {
       return res.status(400).json({ message: 'Sent CPF field is invalid' });

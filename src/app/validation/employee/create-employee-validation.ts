@@ -3,7 +3,9 @@ import convertDate from '../../utils/convertDate';
 import validateCPF from '../../utils/validateCPF';
 
 export default (req, res, next) => {
-  req.body.birthday = convertDate(req.body.birthday);
+  if (req.body.birthday) {
+    req.body.birthday = convertDate(req.body.birthday);
+  }
   try {
     req.body.cpf = req.body.cpf.replace(/[^0-9]/g, '');
     const teste = validateCPF(req.body.cpf);

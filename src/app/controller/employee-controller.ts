@@ -29,12 +29,6 @@ class EmployeeController {
     }
     try {
       const result = await Employee.create(req.body);
-      if (result.cpf) {
-        result.cpf = result.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
-          function (regex, argumento1, argumento2, argumento3, argumento4) {
-            return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
-          });
-      }
       return res.status(201).json(result);
     } catch (error) {
       return res.status(500).json({ error });
@@ -46,12 +40,6 @@ class EmployeeController {
       const result = await Employee.findByIdAndUpdate(req.params.employee_id, req.body);
       if (result) {
         const employee = await Employee.findById(req.params.employee_id);
-        if (employee && employee.cpf) {
-          employee.cpf = employee.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
-            function (regex, argumento1, argumento2, argumento3, argumento4) {
-              return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
-            });
-        }
         return res.status(200).json({ message: 'Updated successfully.', employee });
       } else {
         return res.status(404).json({

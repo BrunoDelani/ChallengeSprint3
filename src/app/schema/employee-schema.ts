@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Schema, model } from 'mongoose';
 import EmployeeInterface from '../interface/employee-interface';
 
@@ -8,6 +9,22 @@ const EmployeeSchema = new Schema({
   office: { type: String, enum: ['gerente', 'vendedor', 'caixa'], required: true },
   birthday: { type: Date, required: true },
   situation: { type: String, default: 'active' }
+}, {
+  toJSON: {
+    transform: function (doc, ret) {
+      return {
+        id: ret.id,
+        name: ret.name,
+        cpf: ret.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
+          function (regex, argumento1, argumento2, argumento3, argumento4) {
+            return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
+          }),
+        office: ret.office,
+        birthday: moment().format('DD/MM/YYYY'),
+        situation: ret.situation
+      };
+    }
+  }
 });
 
 export default model<EmployeeInterface>('employee', EmployeeSchema);

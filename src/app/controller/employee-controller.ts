@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import Employee from '../schema/employee-schema';
+const { ObjectId } = require('mongodb');
 
 class EmployeeController {
   public async findEmployee (req: Request, res: Response): Promise<Response> {
     try {
-      const result = await Employee.find();
+      const result = await Employee.find(req.query);
       return res.status(200).json(result);
     } catch (error) {
       return res.status(500).json({ error });
@@ -37,7 +38,8 @@ class EmployeeController {
 
   public async updateEmployee (req: Request, res: Response) {
     try {
-      const result = await Employee.findByIdAndUpdate(req.params.employee_id, req.body);
+      const id = ObjectId(req.params.employee_id);
+      const result = await Employee.findByIdAndUpdate(id, req.body);
       if (result) {
         const employee = await Employee.findById(req.params.employee_id);
         return res.status(200).json({ message: 'Updated successfully.', employee });
@@ -52,14 +54,22 @@ class EmployeeController {
         });
       }
     } catch (error) {
-      return res.status(500).json({ error });
+      return res.status(400).json({
+        message: 'Bad Request',
+        details: [
+          {
+            message: 'Id invalid.'
+          }
+        ]
+      });
     }
   }
 
   public async deleteEmployee (req: Request, res: Response) {
     try {
-      const result = await Employee.findByIdAndDelete(req.params.employee_id);
-      if (result) {
+      const id = ObjectId(req.params.employee_id);
+      const result = await Employee.findByIdAndDelete(id);
+      if (!result === null) {
         return res.status(204).send();
       } else {
         return res.status(404).json({
@@ -72,7 +82,14 @@ class EmployeeController {
         });
       }
     } catch (error) {
-      return res.status(500).json({ error });
+      return res.status(400).json({
+        message: 'Bad Request',
+        details: [
+          {
+            message: 'Id invalid.'
+          }
+        ]
+      });
     }
   }
 }

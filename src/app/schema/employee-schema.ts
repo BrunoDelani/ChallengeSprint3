@@ -13,7 +13,7 @@ const EmployeeSchema = new Schema({
   toJSON: {
     transform: function (doc, ret) {
       return {
-        id: ret.id,
+        id: ret._id,
         name: ret.name,
         cpf: ret.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
           function (regex, argumento1, argumento2, argumento3, argumento4) {

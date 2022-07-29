@@ -12,7 +12,6 @@ export default (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
-  console.log(req.body.birthday);
   const schema = Joi.object({
     name: Joi.string().required(),
     cpf: Joi.string().required(),

@@ -5,7 +5,7 @@ class EmployeeController {
   public async findEmployee (req: Request, res: Response): Promise<Response> {
     try {
       const result = await Employee.find();
-      return res.status(201).json(result);
+      return res.status(200).json(result);
     } catch (error) {
       return res.status(500).json({ error });
     }
@@ -44,10 +44,24 @@ class EmployeeController {
     }
   }
 
-  public async updateEmployee (req: Request, res: Response): Promise<Response> {
+  public async updateEmployee (req: Request, res: Response) {
     try {
-      const result = await Employee.findByIdAndUpdate(req.params.employee_id, req.body);
-      return res.status(201).json(result);
+      const id = req.params.employee_id;
+      Employee.findByIdAndUpdate(id, { $set: req.body }, async (error) => {
+        if (!error) {
+          const employee = await Employee.findById(id);
+          return res.status(200).json({ message: 'Updated', employee });
+        } else {
+          return res.status(404).json({
+            message: 'Bad Request',
+            details: [
+              {
+                message: 'User not found.'
+              }
+            ]
+          });
+        }
+      });
     } catch (error) {
       return res.status(500).json({ error });
     }
@@ -59,7 +73,7 @@ class EmployeeController {
       Employee.findByIdAndDelete(id)
         .exec((err) => {
           if (!err) {
-            return res.status(204).send({ message: 'Deleted' });
+            return res.status(204).send();
           } else {
             return res.status(404).json({
               message: 'Bad Request',
@@ -75,6 +89,8 @@ class EmployeeController {
       return res.status(500).json({ error });
     }
   }
+
+  private validateEmployee () { }
 }
 
 export default new EmployeeController();

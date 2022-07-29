@@ -43,27 +43,26 @@ class EmployeeController {
 
   public async updateEmployee (req: Request, res: Response) {
     try {
-      Employee.findByIdAndUpdate(req.params.employee_id, { $set: req.body }, async (error) => {
-        if (!error) {
-          const employee = await Employee.findById(req.params.employee_id);
-          if (employee && employee.cpf) {
-            employee.cpf = employee.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
-              function (regex, argumento1, argumento2, argumento3, argumento4) {
-                return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
-              });
-          }
-          return res.status(200).json({ message: 'Updated successfully.', employee });
-        } else {
-          return res.status(404).json({
-            message: 'Bad Request',
-            details: [
-              {
-                message: 'User not found.'
-              }
-            ]
-          });
+      const result = await Employee.findByIdAndUpdate(req.params.employee_id, req.body);
+      if (result) {
+        const employee = await Employee.findById(req.params.employee_id);
+        if (employee && employee.cpf) {
+          employee.cpf = employee.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
+            function (regex, argumento1, argumento2, argumento3, argumento4) {
+              return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
+            });
         }
-      });
+        return res.status(200).json({ message: 'Updated successfully.', employee });
+      } else {
+        return res.status(404).json({
+          message: 'Bad Request',
+          details: [
+            {
+              message: 'Employee not found.'
+            }
+          ]
+        });
+      }
     } catch (error) {
       return res.status(500).json({ error });
     }
@@ -71,21 +70,19 @@ class EmployeeController {
 
   public async deleteEmployee (req: Request, res: Response) {
     try {
-      Employee.findByIdAndDelete(req.params.employee_id)
-        .exec((err) => {
-          if (!err) {
-            return res.status(204).send();
-          } else {
-            return res.status(404).json({
-              message: 'Bad Request',
-              details: [
-                {
-                  message: 'User not found.'
-                }
-              ]
-            });
-          }
+      const result = await Employee.findByIdAndDelete(req.params.employee_id);
+      if (result) {
+        return res.status(204).send();
+      } else {
+        return res.status(404).json({
+          message: 'Bad Request',
+          details: [
+            {
+              message: 'Employee not found.'
+            }
+          ]
         });
+      }
     } catch (error) {
       return res.status(500).json({ error });
     }

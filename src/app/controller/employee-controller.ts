@@ -13,6 +13,21 @@ class EmployeeController {
 
   public async createEmployee (req: Request, res: Response): Promise<Response> {
     try {
+      const result = await Employee.findOne({ cpf: req.body.cpf });
+      if (result) {
+        return res.status(400).json({
+          message: 'Bad Request',
+          details: [
+            {
+              message: 'CPF is already in use.'
+            }
+          ]
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+    try {
       const result = await Employee.create(req.body);
       if (result.cpf) {
         result.cpf = result.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,

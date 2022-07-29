@@ -53,10 +53,24 @@ class EmployeeController {
     }
   }
 
-  public async deleteEmployee (req: Request, res: Response): Promise<Response> {
+  public async deleteEmployee (req: Request, res: Response) {
     try {
-      await Employee.findByIdAndDelete(req.params.employee_id);
-      return res.status(204).send();
+      const id = req.params.employee_id;
+      Employee.findByIdAndDelete(id)
+        .exec((err) => {
+          if (!err) {
+            return res.status(204).send({ message: 'Deleted' });
+          } else {
+            return res.status(404).json({
+              message: 'Bad Request',
+              details: [
+                {
+                  message: 'User not found.'
+                }
+              ]
+            });
+          }
+        });
     } catch (error) {
       return res.status(500).json({ error });
     }

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import 'dotenv/config';
 
-mongoose.connect(`mongodb+srv://${'Challenge-Sprint'}:${'Challenge-Sprint'}@nodeapi.w1es0.mongodb.net/${'challenge-sprint3'}`);
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@nodeapi.w1es0.mongodb.net/${process.env.DB_NAME}`);
 
 const database = mongoose.connection;
 

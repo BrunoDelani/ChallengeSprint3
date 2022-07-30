@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Product from '../schema/product-schema';
 import Employee from '../schema/employee-schema';
+import errorResponse from '../utils/errorResponse';
 const { ObjectId } = require('mongodb');
 
 class ProductController {
@@ -30,16 +31,11 @@ class ProductController {
         const products = await Product.find(req.body).skip(skip).limit(limit).sort('-createdOn');
         const totalCount: number = await Product.countDocuments(req.body);
         const totalPages: number = Math.round(totalCount / limit);
+
         if (totalCount === 0) {
-          return res.status(404).json({
-            message: 'Bad Request',
-            details: [
-              {
-                message: 'Products not found, empty page.'
-              }
-            ]
-          });
+          return errorResponse(404, 'Products not found, empty page.', res);
         }
+
         return res.status(200).json({
           products,
           currentPage: page,
@@ -49,24 +45,10 @@ class ProductController {
         }
         );
       } else {
-        return res.status(404).json({
-          message: 'Bad Request',
-          details: [
-            {
-              message: 'Employee not found.'
-            }
-          ]
-        });
+        return errorResponse(404, 'Employee not found.', res);
       }
     } catch (error) {
-      return res.status(400).json({
-        message: 'Bad Request',
-        details: [
-          {
-            message: 'Employee id invalid.'
-          }
-        ]
-      });
+      return errorResponse(400, 'Employee id invalid.', res);
     }
   }
 
@@ -79,34 +61,13 @@ class ProductController {
           const product = await Product.create(req.body);
           return res.status(201).json(product);
         } else {
-          return res.status(401).json({
-            message: 'Bad Request',
-            details: [
-              {
-                message: 'Employee unauthorized.'
-              }
-            ]
-          });
+          return errorResponse(401, 'Employee unauthorized.', res);
         }
       } else {
-        return res.status(404).json({
-          message: 'Bad Request',
-          details: [
-            {
-              message: 'Employee not found.'
-            }
-          ]
-        });
+        return errorResponse(404, 'Employee not found.', res);
       }
     } catch (error) {
-      return res.status(400).json({
-        message: 'Bad Request',
-        details: [
-          {
-            message: 'Employee id invalid.'
-          }
-        ]
-      });
+      return errorResponse(400, 'Employee id invalid.', res);
     }
   }
 }

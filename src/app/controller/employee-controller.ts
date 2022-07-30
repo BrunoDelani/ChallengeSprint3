@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Employee from '../schema/employee-schema';
+import errorResponse from '../utils/errorResponse';
 const { ObjectId } = require('mongodb');
 
 class EmployeeController {
@@ -18,14 +19,7 @@ class EmployeeController {
       const totalCount: number = await Employee.countDocuments(req.query);
       const totalPages: number = Math.round(totalCount / limit);
       if (totalCount === 0) {
-        return res.status(404).json({
-          message: 'Bad Request',
-          details: [
-            {
-              message: 'Employees not found, empty page.'
-            }
-          ]
-        });
+        return errorResponse(404, 'Employees not found, empty page.', res);
       }
       return res.status(200).json({
         employees,
@@ -44,14 +38,7 @@ class EmployeeController {
     try {
       const result = await Employee.findOne({ cpf: req.body.cpf });
       if (result) {
-        return res.status(400).json({
-          message: 'Bad Request',
-          details: [
-            {
-              message: 'CPF is already in use.'
-            }
-          ]
-        });
+        return errorResponse(400, 'CPF is already in use.', res);
       }
     } catch (error) {
       return res.status(500).json({ error });
@@ -72,24 +59,10 @@ class EmployeeController {
         const employee = await Employee.findById(req.params.employee_id);
         return res.status(200).json({ message: 'Updated successfully.', employee });
       } else {
-        return res.status(404).json({
-          message: 'Bad Request',
-          details: [
-            {
-              message: 'Employee not found.'
-            }
-          ]
-        });
+        return errorResponse(404, 'Employee not found.', res);
       }
     } catch (error) {
-      return res.status(400).json({
-        message: 'Bad Request',
-        details: [
-          {
-            message: 'Id invalid.'
-          }
-        ]
-      });
+      return errorResponse(400, 'Employee id invalid.', res);
     }
   }
 
@@ -100,24 +73,10 @@ class EmployeeController {
       if (result) {
         return res.status(204).send();
       } else {
-        return res.status(404).json({
-          message: 'Bad Request',
-          details: [
-            {
-              message: 'Employee not found.'
-            }
-          ]
-        });
+        return errorResponse(404, 'Employee not found.', res);
       }
     } catch (error) {
-      return res.status(400).json({
-        message: 'Bad Request',
-        details: [
-          {
-            message: 'Id invalid.'
-          }
-        ]
-      });
+      return errorResponse(400, 'Employee id invalid.', res);
     }
   }
 }

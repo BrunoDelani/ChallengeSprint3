@@ -1,14 +1,18 @@
 import { Router } from 'express';
 
 import EmployeeController from '../app/controller/employee-controller';
+import productController from '../app/controller/product-controller';
 import createEmployeeValidation from '../app/validation/employee/create-employee-validation';
 import updateEmployeeValidation from '../app/validation/employee/update-employee-validation';
 
 const routes = Router();
+const version: String = '/api/v1/';
 
-routes.get('/api/v1/employee*', EmployeeController.findEmployee);
-routes.post('/api/v1/employee', createEmployeeValidation, EmployeeController.createEmployee);
-routes.put('/api/v1/employee/:employee_id', updateEmployeeValidation, EmployeeController.updateEmployee);
-routes.delete('/api/v1/employee/:employee_id', EmployeeController.deleteEmployee);
+routes.get(`${version}employee*`, EmployeeController.findEmployee);
+routes.post(`${version}employee`, createEmployeeValidation, EmployeeController.createEmployee);
+routes.put(`${version}employee/:employee_id`, updateEmployeeValidation, EmployeeController.updateEmployee);
+routes.delete(`${version}employee/:employee_id`, EmployeeController.deleteEmployee);
+
+routes.post(`${version}product`, productController.createProduct);
 
 export default routes;

@@ -7,7 +7,7 @@ class ProductController {
   public async createProduct (req: Request, res: Response): Promise<Response> {
     try {
       const id = ObjectId(req.body.employee_id);
-      const employee = await Employee.findOne(id);
+      const employee = await Employee.findById(id);
       console.log(employee);
       if (employee) {
         if (employee.situation === 'active' && employee.office === 'gerente') {
@@ -38,7 +38,7 @@ class ProductController {
         message: 'Bad Request',
         details: [
           {
-            message: 'Id invalid.'
+            message: 'Employee id invalid.'
           }
         ]
       });

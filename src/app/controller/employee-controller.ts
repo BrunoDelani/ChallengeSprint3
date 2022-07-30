@@ -97,7 +97,7 @@ class EmployeeController {
     try {
       const id = ObjectId(req.params.employee_id);
       const result = await Employee.findByIdAndDelete(id);
-      if (!result === null) {
+      if (result) {
         return res.status(204).send();
       } else {
         return res.status(404).json({

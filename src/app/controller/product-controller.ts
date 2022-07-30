@@ -6,41 +6,67 @@ const { ObjectId } = require('mongodb');
 class ProductController {
   public async findProducts (req: Request, res: Response): Promise<Response> {
     try {
-      let page: number = 1;
-      let limit: number = 5;
-
-      if (req.query.page) {
-        page = parseInt(req.query.page.toString());
+      let validacaoEmployeeId: boolean = true;
+      if (req.body.employee_id) {
+        const objectId = ObjectId(req.body.employee_id);
+        const employee = await Employee.findById(objectId);
+        if (!employee) {
+          validacaoEmployeeId = false;
+        }
       }
-      if (req.query.limit) {
-        limit = parseInt(req.query.limit.toString());
-      }
+      if (validacaoEmployeeId) {
+        let page: number = 1;
+        let limit: number = 5;
 
-      const skip: number = limit * (page - 1);
+        if (req.query.page) {
+          page = parseInt(req.query.page.toString());
+        }
+        if (req.query.limit) {
+          limit = parseInt(req.query.limit.toString());
+        }
 
-      const products = await Product.find(req.body).skip(skip).limit(limit).sort('-createdOn');
-      const totalCount: number = await Product.countDocuments(req.body);
-      const totalPages: number = Math.round(totalCount / limit);
-      if (totalCount === 0) {
+        const skip: number = limit * (page - 1);
+
+        const products = await Product.find(req.body).skip(skip).limit(limit).sort('-createdOn');
+        const totalCount: number = await Product.countDocuments(req.body);
+        const totalPages: number = Math.round(totalCount / limit);
+        if (totalCount === 0) {
+          return res.status(404).json({
+            message: 'Bad Request',
+            details: [
+              {
+                message: 'Products not found, empty page.'
+              }
+            ]
+          });
+        }
+        return res.status(200).json({
+          products,
+          currentPage: page,
+          pageSize: products.length,
+          totalCount,
+          totalPages
+        }
+        );
+      } else {
         return res.status(404).json({
           message: 'Bad Request',
           details: [
             {
-              message: 'Products not found, empty page.'
+              message: 'Employee not found.'
             }
           ]
         });
       }
-      return res.status(200).json({
-        products,
-        currentPage: page,
-        pageSize: products.length,
-        totalCount,
-        totalPages
-      }
-      );
     } catch (error) {
-      return res.status(500).json({ error });
+      return res.status(400).json({
+        message: 'Bad Request',
+        details: [
+          {
+            message: 'Employee id invalid.'
+          }
+        ]
+      });
     }
   }
 

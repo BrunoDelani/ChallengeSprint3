@@ -64,7 +64,7 @@ class EmployeeController {
     }
   }
 
-  public async updateEmployee (req: Request, res: Response) {
+  public async updateEmployee (req: Request, res: Response): Promise<Response> {
     try {
       const id = ObjectId(req.params.employee_id);
       const result = await Employee.findByIdAndUpdate(id, req.body);
@@ -93,7 +93,7 @@ class EmployeeController {
     }
   }
 
-  public async deleteEmployee (req: Request, res: Response) {
+  public async deleteEmployee (req: Request, res: Response): Promise<Response> {
     try {
       const id = ObjectId(req.params.employee_id);
       const result = await Employee.findByIdAndDelete(id);

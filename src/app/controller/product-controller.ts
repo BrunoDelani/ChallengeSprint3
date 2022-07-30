@@ -8,7 +8,6 @@ class ProductController {
     try {
       const id = ObjectId(req.body.employee_id);
       const employee = await Employee.findById(id);
-      console.log(employee);
       if (employee) {
         if (employee.situation === 'active' && employee.office === 'gerente') {
           const product = await Product.create(req.body);

@@ -6,22 +6,18 @@ export default (req, res, next) => {
   if (req.body.birthday) {
     req.body.birthday = convertDate(req.body.birthday);
   }
-  try {
-    let teste: Boolean = false;
-    if (req.body.cpf) {
-      req.body.cpf = req.body.cpf.replace(/[^0-9]/g, '');
-      teste = validateCPF(req.body.cpf);
-    }
-    if (!teste) {
-      return res.status(400).json({
-        message: 'Bad Request',
-        details: [
-          { message: 'Sent CPF field is invalid' }
-        ]
-      });
-    }
-  } catch (error) {
-    console.log(error);
+  let teste: Boolean = false;
+  if (req.body.cpf) {
+    req.body.cpf = req.body.cpf.replace(/[^0-9]/g, '');
+    teste = validateCPF(req.body.cpf);
+  }
+  if (!teste) {
+    return res.status(400).json({
+      message: 'Bad Request',
+      details: [
+        { message: 'Sent CPF field is invalid' }
+      ]
+    });
   }
   const schema = Joi.object({
     name: Joi.string().max(100).required(),

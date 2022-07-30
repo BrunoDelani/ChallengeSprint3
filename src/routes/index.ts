@@ -14,6 +14,7 @@ routes.post(`${version}employee`, createEmployeeValidation, EmployeeController.c
 routes.put(`${version}employee/:employee_id`, updateEmployeeValidation, EmployeeController.updateEmployee);
 routes.delete(`${version}employee/:employee_id`, EmployeeController.deleteEmployee);
 
+routes.get(`${version}products`, productController.findProducts);
 routes.post(`${version}product`, createProductValidation, productController.createProduct);
 
 export default routes;

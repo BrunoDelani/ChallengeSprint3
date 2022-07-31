@@ -17,9 +17,11 @@ Cloud MongoDB -> User and database public
 
 # Scripts
 Run aplication:
- - npm run dev
-Lint aplication:
+ - npm run dev 
+
+Lint aplication: 
  - npm run lint:fix
+
 Create dist:
  - npm run build
 
@@ -30,5 +32,5 @@ Run aplication with docker:
  - docker-compose logs -f api
 
 # Documentation API
-File in: /docs/api-documentation.yaml
-https://app.swaggerhub.com/apis/BrunoDelani/challengesprint3/1.0.0
+File in: /docs/api-documentation.yaml <br>
+Or: https://app.swaggerhub.com/apis/BrunoDelani/challengesprint3/1.0.0

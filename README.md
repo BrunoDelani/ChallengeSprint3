@@ -28,3 +28,7 @@ Run aplication with docker:
  - docker-compose up -d
  - docker-compose down
  - docker-compose logs -f api
+
+# Documentation API
+File in: /docs/api-documentation.yaml
+https://app.swaggerhub.com/apis/BrunoDelani/challengesprint3/1.0.0

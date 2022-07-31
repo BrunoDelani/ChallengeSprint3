@@ -38,7 +38,7 @@ class EmployeeController {
     try {
       const result = await Employee.findOne({ cpf: req.body.cpf });
       if (result) {
-        return errorResponse(400, 'CPF is already in use.', res);
+        return errorResponse(409, 'CPF is already in use.', res);
       }
     } catch (error) {
       return res.status(500).json({ error });

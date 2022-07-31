@@ -1,0 +1,266 @@
+---
+swagger: "2.0"
+info:
+  description: Challenge with NodeJS - Typescript - Sprint 3
+  version: 1.0.0
+  title: Simple Store API
+  contact:
+    email: bruno.cirino.pb@compasso.com.br
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: virtserver.swaggerhub.com
+basePath: /BrunoDelani/challengesprint3/1.0.0
+tags:
+- name: developers
+  description: Operations available to regular developers.
+schemes:
+- https
+paths:
+  /api/v1/employee:
+    get:
+      tags:
+      - developers
+      summary: searches employees
+      description: |
+        By passing the appropriate options, you can search the employees
+      operationId: searchEmployee
+      produces:
+      - application/json
+      parameters:
+      - name: name
+        in: query
+        description: pass an optional search string to search for employee by name.
+        required: false
+        type: string
+      - name: office
+        in: query
+        description: pass an optional search string to search for employee by office.
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: page number
+        required: false
+        type: integer
+        minimum: 1
+        format: int32
+      - name: limit
+        in: query
+        description: number of entities per page.
+        required: false
+        type: integer
+        minimum: 1
+        format: int32
+      responses:
+        "200":
+          description: search results matching criteria.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Employee'
+        "404":
+          description: Employees not found, empty page.
+        "500":
+          description: Error page.
+    post:
+      tags:
+      - developers
+      summary: adds employee
+      description: Adds an employee to the system.
+      operationId: addEmployee
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: employee
+        description: The employee to create.
+        required: false
+        schema:
+          $ref: '#/definitions/Employee'
+      responses:
+        "201":
+          description: Employee created.
+        "400":
+          description: Invalid fields.
+        "409":
+          description: CPF is already in use.
+        "500":
+          description: Error page.
+  /api/v1/employee/{employee_id}:
+    put:
+      tags:
+      - developers
+      summary: update employee
+      description: Update an employee to the system.
+      operationId: updateEmployee
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: employee_id
+        in: path
+        required: true
+        type: string
+        format: ObjectId
+      - in: body
+        name: employee
+        description: Employee information to be updated.
+        required: false
+        schema:
+          $ref: '#/definitions/Employee'
+      responses:
+        "201":
+          description: Employee updated.
+        "400":
+          description: Employee id invalid.
+        "404":
+          description: Employee not found.
+    delete:
+      tags:
+      - developers
+      summary: delete employee
+      description: Delete an employee to the system.
+      operationId: deleteEmployee
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: employee_id
+        in: path
+        required: true
+        type: string
+        format: ObjectId
+      responses:
+        "204":
+          description: No Content.
+        "400":
+          description: Employee id invalid.
+        "404":
+          description: Employee not found.
+  /api/v1/products:
+    get:
+      tags:
+      - developers
+      summary: searches Products
+      description: |
+        By passing the appropriate options, you can search the products
+      operationId: searchProducts
+      produces:
+      - application/json
+      parameters:
+      - name: page
+        in: query
+        description: page number
+        required: false
+        type: integer
+        minimum: 1
+        format: int32
+      - name: limit
+        in: query
+        description: number of entities per page.
+        required: false
+        type: integer
+        minimum: 1
+        format: int32
+      - in: body
+        name: product
+        description: Product information to search.
+        required: false
+        schema:
+          $ref: '#/definitions/Product'
+      responses:
+        "200":
+          description: search results matching criteria.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+        "404":
+          description: Products not found, empty page.
+        "500":
+          description: Error page.
+  /api/v1/product:
+    post:
+      tags:
+      - developers
+      summary: create Products
+      description: Adds an product to the system.
+      operationId: createProducts
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: product
+        description: The product to create.
+        required: false
+        schema:
+          $ref: '#/definitions/Product'
+      responses:
+        "201":
+          description: Employee created.
+        "400":
+          description: Employee id invalid.
+        "401":
+          description: Employee unauthorized.
+        "404":
+          description: Employee not found.
+definitions:
+  Employee:
+    type: object
+    required:
+    - birthday
+    - cpf
+    - name
+    - office
+    properties:
+      id:
+        type: string
+        format: ObjectId
+        example: 62e45ac8cd18211344d41a96
+      name:
+        type: string
+        example: Bruno Delani
+      cpf:
+        type: string
+        example: "47267815022"
+      office:
+        type: string
+        example: gerente
+        enum:
+        - gerente
+        - vendedor
+        - caixa
+      birthday:
+        type: string
+        example: 31/05/2001
+      situation:
+        type: string
+        example: active
+  Product:
+    type: object
+    required:
+    - category
+    - employee_id
+    - name
+    - price
+    properties:
+      id:
+        type: string
+        format: ObjectId
+        example: 62e6a3dfb51cded15de01a6b
+      name:
+        type: string
+        example: notebook dell
+      category:
+        type: string
+        example: eletronico
+      price:
+        type: number
+        example: 12.9
+      employee_id:
+        $ref: '#/definitions/Employee'
